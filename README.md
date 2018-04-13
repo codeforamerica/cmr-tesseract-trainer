@@ -2,12 +2,12 @@
 
 This is a script for training Tesseract 3, based on the tutorial found [here.](https://github.com/tesseract-ocr/tesseract/wiki/Training-Tesseract-3.03%E2%80%933.05)
 
-##Prerequisites
+## Prerequisites
 
 Install Tesseract with training tools on OS X by running:
 `brew install tesseract --with-training-tools`
 
-##Usage
+## Usage
 
 Run the script with `ruby train.rb`
 
@@ -19,7 +19,7 @@ Output file will be found in traineddata folder; also, the script copies the fil
 
 To specify the generated "rap" language, you will need to call Tesseract with `tesseract --lang rap`.
 
-##Notes
+## Notes
 
 Latin unicharset sourced from:
 https://github.com/tesseract-ocr/langdata
