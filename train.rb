@@ -10,33 +10,35 @@ FileUtils.mkdir('tempfiles')
 FileUtils.rm_rf('traineddata')
 FileUtils.mkdir('traineddata')
 
-# Generate rap.CourierNew.exp0.tif and rap.CourierNew.exp0.box
-system(
+# Generate rap.courier.exp0.tif and rap.courier.exp0.box
+text2image_status = system(
   { 'PANGOCAIRO_BACKEND' => 'fc' },
   'text2image',
   "--text=#{TEXT_INPUT_PATH}",
-  '--outputbase=rap.CourierNew.exp0',
-  '--font=Courier New',
-  '--fonts_dir=/Library/Fonts'
+  '--outputbase=rap.Courier.exp0',
+  '--font=Courier',
+  '--fonts_dir=inputs'
 )
 
-FileUtils.mv('rap.CourierNew.exp0.tif', 'tempfiles/')
-FileUtils.mv('rap.CourierNew.exp0.box', 'tempfiles/')
+return unless text2image_status
 
-# Generate rap.CourierNew.exp0.tr
+FileUtils.mv('rap.Courier.exp0.tif', 'tempfiles/')
+FileUtils.mv('rap.Courier.exp0.box', 'tempfiles/')
+
+# Generate rap.Courier.exp0.tr
 system(
   'tesseract',
-  'tempfiles/rap.CourierNew.exp0.tif',
-  'rap.CourierNew.exp0',
+  'tempfiles/rap.Courier.exp0.tif',
+  'rap.Courier.exp0',
   'box.train.stderr'
 )
 
-FileUtils.mv('rap.CourierNew.exp0.tr', 'tempfiles/')
+FileUtils.mv('rap.Courier.exp0.tr', 'tempfiles/')
 
 # Generate unicharset
 system(
   'unicharset_extractor',
-  'tempfiles/rap.CourierNew.exp0.box'
+  'tempfiles/rap.Courier.exp0.box'
 )
 
 FileUtils.mv('unicharset', 'tempfiles/')
@@ -56,14 +58,14 @@ system(
   '-F', 'inputs/font_properties',
   '-U', 'tempfiles/output_unicharset',
   '-O', 'tempfiles/rap.unicharset',
-  'tempfiles/rap.CourierNew.exp0.tr'
+  'tempfiles/rap.Courier.exp0.tr'
 )
 FileUtils.mv('inttemp', 'tempfiles/rap.inttemp')
 FileUtils.mv('pffmtable', 'tempfiles/rap.pffmtable')
 FileUtils.mv('shapetable', 'tempfiles/rap.shapetable')
 
 # Generate normproto
-system('cntraining', 'tempfiles/rap.CourierNew.exp0.tr')
+system('cntraining', 'tempfiles/rap.Courier.exp0.tr')
 FileUtils.mv('normproto', 'tempfiles/rap.normproto')
 
 # Generate frequent words dawg
@@ -107,6 +109,7 @@ system(
 )
 
 FileUtils.copy('inputs/rap.unicharambigs', 'tempfiles/')
+FileUtils.copy('inputs/rap.config', 'tempfiles/')
 
 system('combine_tessdata', 'tempfiles/rap.')
 
